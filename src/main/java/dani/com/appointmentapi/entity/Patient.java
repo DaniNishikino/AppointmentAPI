@@ -22,16 +22,17 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 11)
     private String cpf;
     @Column(nullable = false)
     private LocalDate birthDate;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 11)
     private String phone;
     @Column(nullable = false)
     private String email;
     private String address;
+    private Boolean active = true;
 
 }
