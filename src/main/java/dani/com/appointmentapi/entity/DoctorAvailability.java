@@ -26,6 +26,7 @@ public class DoctorAvailability {
     private Doctor doctor;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
     @Column(nullable = false)
     private LocalTime startTime;

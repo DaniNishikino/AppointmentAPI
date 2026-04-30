@@ -12,6 +12,7 @@ public interface PatientService {
     void create(CreatePatientDTO patient);
     void update(UUID patientId, UpdatePatientDTO patient);
     void deactivate(UUID patientId);
+    void activate(UUID patientId);
     PatientResponseDTO getPatientById(UUID patientId);
     PatientResponseDTO getPatientByCpf(String cpf);
     List<PatientResponseDTO> getAllPatients();

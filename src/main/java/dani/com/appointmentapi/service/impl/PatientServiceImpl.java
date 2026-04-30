@@ -42,6 +42,14 @@ public class PatientServiceImpl implements PatientService {
         patientToDeactivate.setActive(false);
         patientRepository.save(patientToDeactivate);
     }
+
+    @Override
+    public void activate(UUID patientId) {
+        Patient patientToActivate = getPatient(patientId);
+        patientToActivate.setActive(true);
+        patientRepository.save(patientToActivate);
+    }
+
     @Override
     public PatientResponseDTO getPatientById(UUID id) {
         return PatientResponseDTO.fromEntity(getPatient(id));

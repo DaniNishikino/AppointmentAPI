@@ -12,7 +12,8 @@ public record PatientResponseDTO(
         LocalDate birthDate,
         String phone,
         String email,
-        String address
+        String address,
+        Boolean active
 ) {
     public static PatientResponseDTO fromEntity(Patient p){
         return new PatientResponseDTO(
@@ -22,7 +23,8 @@ public record PatientResponseDTO(
                 p.getBirthDate(),
                 p.getPhone(),
                 p.getEmail(),
-                p.getAddress()
+                p.getAddress(),
+                p.getActive()
         );
     }
 }

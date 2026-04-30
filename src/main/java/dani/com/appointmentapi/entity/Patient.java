@@ -30,7 +30,7 @@ public class Patient {
     private LocalDate birthDate;
     @Column(nullable = false, length = 11)
     private String phone;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
     private String address;
     private Boolean active = true;

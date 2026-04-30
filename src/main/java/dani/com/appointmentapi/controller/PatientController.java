@@ -41,9 +41,14 @@ public class PatientController {
         patientService.update(id, patient);
         return ResponseEntity.noContent().build();
     }
-    @DeleteMapping("/{id}")
+    @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivate(@PathVariable UUID id) {
         patientService.deactivate(id);
+        return ResponseEntity.noContent().build();
+    }
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<Void> activate(@PathVariable UUID id) {
+        patientService.activate(id);
         return ResponseEntity.noContent().build();
     }
 
