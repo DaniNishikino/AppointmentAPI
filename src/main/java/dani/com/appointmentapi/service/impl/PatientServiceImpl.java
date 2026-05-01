@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +23,6 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void create(CreatePatientDTO patient) {
-        if (patient == null){
-            throw new IllegalArgumentException("Patient is null");
-        }
         patientRepository.save(patient.createEntity());
     }
 
@@ -32,6 +30,7 @@ public class PatientServiceImpl implements PatientService {
     public void update(UUID patientId, UpdatePatientDTO patient) {
         Patient patientToUpdate = getPatient(patientId);
         patient.applyToEntity(patientToUpdate);
+        patientToUpdate.setUpdatedAt(LocalDateTime.now());
         patientRepository.save(patientToUpdate);
     }
 
@@ -40,6 +39,7 @@ public class PatientServiceImpl implements PatientService {
         Patient patientToDeactivate = getPatient(patientId);
 
         patientToDeactivate.setActive(false);
+        patientToDeactivate.setUpdatedAt(LocalDateTime.now());
         patientRepository.save(patientToDeactivate);
     }
 
@@ -47,6 +47,7 @@ public class PatientServiceImpl implements PatientService {
     public void activate(UUID patientId) {
         Patient patientToActivate = getPatient(patientId);
         patientToActivate.setActive(true);
+        patientToActivate.setUpdatedAt(LocalDateTime.now());
         patientRepository.save(patientToActivate);
     }
 

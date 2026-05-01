@@ -6,10 +6,11 @@ import dani.com.appointmentapi.dto.res.DoctorResponseDTO;
 import dani.com.appointmentapi.entity.Doctor;
 import dani.com.appointmentapi.repository.DoctorRepository;
 import dani.com.appointmentapi.service.DoctorService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.print.Doc;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,52 +22,46 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void create(CreateDoctorDTO doctorDTO) {
-        if (doctorDTO == null){
-            throw new IllegalArgumentException("Doctor is null");
-        }
         doctorRepository.save(doctorDTO.createEntity());
     }
 
     @Override
     public void update(UpdateDoctorDTO doctorDTO, UUID doctorId) {
-        if (doctorDTO == null){
-            throw new IllegalArgumentException("Doctor is null");
-        }
-        Doctor doctorToUpdate = getDoctor(doctorId);
+        Doctor doctorToUpdate = getDoctorByCrmOrThrow(doctorId);
         doctorDTO.applyToEntity(doctorToUpdate);
+        doctorToUpdate.setUpdatedAt(LocalDateTime.now());
         doctorRepository.save(doctorToUpdate);
     }
 
     @Override
     public void deactivate(UUID doctorId) {
-        Doctor doctorToDeactivate = getDoctor(doctorId);
+        Doctor doctorToDeactivate = getDoctorByCrmOrThrow(doctorId);
         doctorToDeactivate.setActive(false);
+        doctorToDeactivate.setUpdatedAt(LocalDateTime.now());
         doctorRepository.save(doctorToDeactivate);
     }
 
     @Override
     public void activate(UUID doctorId) {
-        Doctor doctorToActivate = getDoctor(doctorId);
+        Doctor doctorToActivate = getDoctorByCrmOrThrow(doctorId);
         doctorToActivate.setActive(true);
+        doctorToActivate.setUpdatedAt(LocalDateTime.now());
         doctorRepository.save(doctorToActivate);
     }
 
     @Override
     public DoctorResponseDTO getDoctorById(UUID doctorId) {
-        return DoctorResponseDTO.toDTO(getDoctor(doctorId));
+        return DoctorResponseDTO.toDTO(getDoctorByCrmOrThrow(doctorId));
     }
 
     @Override
     public DoctorResponseDTO getDoctorByCrm(String crm) {
-        return DoctorResponseDTO.toDTO(doctorRepository
-                .getDoctorByCrm(crm)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found")));
+        return DoctorResponseDTO.toDTO(getDoctorByCrmOrThrow(crm));
     }
 
     @Override
     public DoctorResponseDTO getDoctorByEmail(String email) {
-        return DoctorResponseDTO.toDTO(doctorRepository.getDoctorByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Doctor not found")));
+        return DoctorResponseDTO.toDTO(getDoctorByEmailOrThrow(email));
     }
 
     @Override
@@ -74,9 +69,16 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorRepository.findAll().stream().map(DoctorResponseDTO::toDTO).toList();
     }
 
-    private Doctor getDoctor(UUID doctorId) {
-        return doctorRepository.findById(doctorId).orElseThrow(() -> new IllegalArgumentException("Doctor not found"));
+    private Doctor getDoctorByCrmOrThrow(UUID doctorId) {
+        return doctorRepository.findById(doctorId).orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
     }
+    private Doctor getDoctorByCrmOrThrow(String crm){
+        return doctorRepository.findByCrm(crm).orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
+    }
+    private Doctor getDoctorByEmailOrThrow(String email){
+        return doctorRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Doctor not found"));
+    }
+
 
 
 

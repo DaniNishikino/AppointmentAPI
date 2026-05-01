@@ -5,6 +5,7 @@ import dani.com.appointmentapi.dto.request.UpdateDoctorDTO;
 import dani.com.appointmentapi.dto.res.DoctorResponseDTO;
 import dani.com.appointmentapi.service.DoctorService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,12 +38,12 @@ public class DoctorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody @Valid CreateDoctorDTO doctor) {
+    public ResponseEntity<Void> create(@RequestBody @Valid @NotNull(message = "Doctor is Null") CreateDoctorDTO doctor) {
         doctorService.create(doctor);
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@RequestBody @Valid UpdateDoctorDTO doctor, @PathVariable UUID id) {
+    public ResponseEntity<Void> update(@RequestBody @Valid @NotNull(message = "Doctor Is Null") UpdateDoctorDTO doctor, @PathVariable UUID id) {
         doctorService.update(doctor,id);
         return ResponseEntity.noContent().build();
     }

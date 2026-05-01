@@ -40,4 +40,8 @@ public class Appointment {
     private StatusEnum status = StatusEnum.SCHEDULED;
 
     private String  notes;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }
