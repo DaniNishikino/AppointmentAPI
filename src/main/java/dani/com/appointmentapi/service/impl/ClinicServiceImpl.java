@@ -53,6 +53,11 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
+    public ClinicResponseDTO getClinicByCnpj(String cnpj) {
+        return ClinicResponseDTO.toDTO(getClinicByCnpjOrThrow(cnpj));
+    }
+
+    @Override
     public List<ClinicResponseDTO> getClinicByName(String name) {
         return getClinicByNameOrThrow(name).stream().map(ClinicResponseDTO::toDTO).toList();
     }
@@ -68,5 +73,8 @@ public class ClinicServiceImpl implements ClinicService {
     }
     private List<Clinic> getClinicByNameOrThrow(String name){
         return clinicRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Clinic not found"));
+    }
+    private Clinic getClinicByCnpjOrThrow(String cnpj){
+        return clinicRepository.findByCnpj(cnpj).orElseThrow(() -> new EntityNotFoundException("Clinic not found"));
     }
 }

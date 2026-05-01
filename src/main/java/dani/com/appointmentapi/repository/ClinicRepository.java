@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface ClinicRepository extends JpaRepository<Clinic, UUID> {
 
     Optional<List<Clinic>> findByName(String name);
+    Optional<Clinic> findByCnpj(String cnpj);
 }

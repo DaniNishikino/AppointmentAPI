@@ -13,6 +13,7 @@ public interface ClinicService {
     void deactivate(UUID clinicId);
     void activate(UUID clinicId);
     ClinicResponseDTO getClinicById(UUID clinicId);
+    ClinicResponseDTO getClinicByCnpj(String cnpj);
     List<ClinicResponseDTO> getClinicByName(String name);
     List<ClinicResponseDTO> getAllClinics();
 }
